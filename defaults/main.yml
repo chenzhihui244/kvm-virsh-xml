@@ -1,0 +1,14 @@
+---
+# defaults file for kvm-libvirt-ansible
+
+domain_dir: /c00365621/vm
+numa_node: "0,1"
+cpu_range: "0-31"
+domain_name: demo
+bridge_name: br0
+iface_name: enahisic2i0
+mem_size_g: 16
+vcpu_number: 32
+disk_size_g: 20
+disk_file: "{{ domain_name }}.qcow2"
+cdrom_file: "result-WH-20180312-B21.iso"

@@ -1,0 +1,143 @@
+<!--
+     1. create bridge device
+     2. Adjust domain name, memory size, vcpu number, disk file, cdrom file
+     3. virsh define demo.xml
+-->
+
+<domain type='kvm'>
+	<name>{{ domain_name }}</name>
+	<memory unit='GiB'>{{ mem_size_g }}</memory>
+	<currentMemory unit='GiB'>{{ mem_size_g }}</currentMemory>
+  <numatune>
+	  <memory mode='strict' nodeset='{{ numa_node }}'/>
+  </numatune>
+  <vcpu placement='static' cpuset="{{ cpu_range }}">{{ vcpu_number }}</vcpu>
+  <!--
+  <cputune>
+    <vcpupin vcpu='0' cpuset='0'/>
+    <vcpupin vcpu='1' cpuset='1'/>
+    <vcpupin vcpu='2' cpuset='2'/>
+    <vcpupin vcpu='3' cpuset='3'/>
+    <vcpupin vcpu='4' cpuset='4'/>
+    <vcpupin vcpu='5' cpuset='5'/>
+    <vcpupin vcpu='6' cpuset='6'/>
+    <vcpupin vcpu='7' cpuset='7'/>
+    <vcpupin vcpu='8' cpuset='8'/>
+    <vcpupin vcpu='9' cpuset='9'/>
+    <vcpupin vcpu='10' cpuset='10'/>
+    <vcpupin vcpu='11' cpuset='11'/>
+    <vcpupin vcpu='12' cpuset='12'/>
+    <vcpupin vcpu='13' cpuset='13'/>
+    <vcpupin vcpu='14' cpuset='14'/>
+    <vcpupin vcpu='15' cpuset='15'/>
+    <vcpupin vcpu='16' cpuset='16'/>
+    <vcpupin vcpu='17' cpuset='17'/>
+    <vcpupin vcpu='18' cpuset='18'/>
+    <vcpupin vcpu='19' cpuset='19'/>
+    <vcpupin vcpu='20' cpuset='20'/>
+    <vcpupin vcpu='21' cpuset='21'/>
+    <vcpupin vcpu='22' cpuset='22'/>
+    <vcpupin vcpu='23' cpuset='23'/>
+    <vcpupin vcpu='24' cpuset='24'/>
+    <vcpupin vcpu='25' cpuset='25'/>
+    <vcpupin vcpu='26' cpuset='26'/>
+    <vcpupin vcpu='27' cpuset='27'/>
+    <vcpupin vcpu='28' cpuset='28'/>
+    <vcpupin vcpu='29' cpuset='29'/>
+    <vcpupin vcpu='30' cpuset='30'/>
+    <vcpupin vcpu='31' cpuset='31'/>
+  </cputune>
+-->
+  <cpu mode='host-passthrough' check='none'>
+	  <topology sockets='1' cores='{{ vcpu_number }}' threads='1'/>
+  </cpu>
+  <os>
+    <type arch='aarch64' machine='virt-2.10'>hvm</type>
+    <loader readonly='yes' type='pflash'>/usr/share/AAVMF/AAVMF_CODE.fd</loader>
+    <nvram>/var/lib/libvirt/qemu/nvram/demo_VARS.fd</nvram>
+    <boot dev='cdrom'/>
+  </os>
+  <features>
+    <acpi/>
+    <gic version='3'/>
+  </features>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-system-aarch64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='{{ domain_dir }}/{{ disk_file }}'/>
+      <target dev='sda' bus='scsi'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='/c00365621/{{ cdrom_file }}'/>
+      <target dev='sdb' bus='scsi'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='0' target='0' unit='1'/>
+    </disk>
+    <controller type='usb' index='0' model='qemu-xhci' ports='8'>
+      <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>
+    </controller>
+    <controller type='scsi' index='0' model='virtio-scsi'>
+      <address type='pci' domain='0x0000' bus='0x03' slot='0x00' function='0x0'/>
+    </controller>
+    <controller type='pci' index='0' model='pcie-root'/>
+    <controller type='pci' index='1' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='1' port='0x8'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='pci' index='2' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='2' port='0x9'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='pci' index='3' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='3' port='0xa'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+    </controller>
+    <controller type='pci' index='4' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='4' port='0xb'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x3'/>
+    </controller>
+    <controller type='pci' index='5' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='5' port='0xc'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x4'/>
+    </controller>
+    <controller type='pci' index='6' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='6' port='0xd'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x5'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
+    </controller>
+    <interface type='bridge'>
+	    <source bridge='{{ bridge_name }}'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x01' slot='0x00' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='unix'>
+      <target type='virtio' name='org.qemu.guest_agent.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <rng model='virtio'>
+      <backend model='random'>/dev/urandom</backend>
+      <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
+    </rng>
+  </devices>
+</domain>

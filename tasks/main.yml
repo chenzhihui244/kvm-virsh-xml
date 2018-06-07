@@ -1,0 +1,31 @@
+---
+# tasks file for kvm-libvirt-ansible
+
+- name: make vm dir
+  file:
+          dest={{ domain_dir }}
+          state=directory
+          mode=0755
+
+- name: install dependencies of Deepin
+  apt:
+          name=virtinst,python-libvirt,virt-viewer,virt-manager,bridge-utils,uml-utilities,ovmf,qemu-efi
+          state=present
+          #  when: ansible_distribution == "Deepin GNU/Linux"
+
+- name: create bride
+  script: create_bridge.sh {{ bridge_name }} {{ iface_name }}
+
+- name: create vm disk file
+  script: create_disk_file.sh {{ domain_dir }} {{ disk_file }} {{ disk_size_g }}
+
+- name: Copy vm template file
+  template:
+          src=vm.xml
+          dest={{ domain_dir }}/{{ domain_name }}.xml
+
+- name: Define vm
+  shell:
+          virsh define {{ domain_dir }}/{{ domain_name }}.xml;
+          virsh start {{ domain_name }}
+          # virsh console {{ domain_name }}
