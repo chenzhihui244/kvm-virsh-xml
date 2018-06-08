@@ -32,7 +32,7 @@ License
 
 Usage
 -------
-ansible-playbook -i kvm-libvirt-ansible/tests/inventory kvm-libvirt-ansible/tests/test.yml -e "domain_name=demo1"
+ansible-playbook -i kvm-virsh-xml/tests/inventory kvm-virsh-xml/tests/test.yml -e "domain_name=demo1"
 
 BSD
 
